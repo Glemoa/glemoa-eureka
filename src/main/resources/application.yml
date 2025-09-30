@@ -1,0 +1,12 @@
+spring:
+    application:
+        name: eureka-server
+
+server:
+  port: 8761
+
+eureka:
+  client:
+    # 나 자신은 유레카 서버에 클라이언트로 등록하지 않겠다라는 설정 (자기 자신은 등록할 필요가 없으니까)
+    register-with-eureka: false
+    fetch-registry: false
