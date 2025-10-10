@@ -59,7 +59,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "*.jar"
-          target: "/root/eureka/" # 서버의 배포 디렉토리 (유레카용으로 변경)
+          target: "/home/ubuntu/eureka/" # 서버의 배포 디렉토리 (유레카용으로 변경)
 
       # 3. 서버에서 배포 스크립트 실행 (SSH)
       - name: Execute deployment script on server
@@ -70,7 +70,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           command_timeout: 10m
           script: |
-            mkdir -p /root/eureka && cd /root/eureka
+            DEPLOY_DIR="/home/ubuntu/eureka"
+            mkdir -p $DEPLOY_DIR && cd $DEPLOY_DIR
 
             APP_PORT=${APP_PORT:-8761}
             echo "Using APP_PORT=$APP_PORT"
@@ -78,7 +79,7 @@ jobs:
             JAR_FILE=$(ls -1t glemoa-eureka*.jar 2>/dev/null | grep -v plain | head -n 1)
 
             if [ -z "$JAR_FILE" ]; then
-              echo "❌ No eureka JAR found in /root/eureka. Listing contents:"
+              echo "❌ No eureka JAR found in $DEPLOY_DIR. Listing contents:"
               ls -al .
               exit 1
             fi
